@@ -29,7 +29,7 @@ public class Order {
     private String customerId;
 
     @Column(name = "sub_total")
-    private Double Double;
+    private Double subTotal;
 
     @Column(name = "total_amt")
     private Double totalAmt;

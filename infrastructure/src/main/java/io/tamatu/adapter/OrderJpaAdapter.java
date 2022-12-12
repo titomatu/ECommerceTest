@@ -51,6 +51,7 @@ public class OrderJpaAdapter implements OrderPersistencePort {
             orderDto.setPaymentMode(order1.getPayment().getPaymentMode());
             orderDto.setShippingAddress(AddressMapper.INSTANCE.addressToAddressDto(order1.getShippingAddress()));
             orderDto.setBillingAddress(AddressMapper.INSTANCE.addressToAddressDto(order1.getBillingAddress()));
+            orderDto.setOrderItems(orderItemListToOrderItemDtoList(order1.getOrderItems()));
 
             return orderDto;
         }
@@ -113,6 +114,24 @@ public class OrderJpaAdapter implements OrderPersistencePort {
                 );
 
         return orderItemList;
+    }
+
+    private static List<OrderItemDto> orderItemListToOrderItemDtoList(List<OrderItem> orderItemList){
+        List<OrderItemDto> orderItemDtoList = new ArrayList<>();
+
+        orderItemList.stream()
+                .forEach(
+                        o -> {
+                            orderItemDtoList.add(
+                                    new OrderItemDto(
+                                            o.getProduct().getProductId(),
+                                            o.getQuantity()
+                                    )
+                            );
+                        }
+                );
+
+        return orderItemDtoList;
     }
 
 }
