@@ -3,6 +3,8 @@ package io.tamatu.data;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,6 +15,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Product {
 
     @Id
@@ -32,6 +35,7 @@ public class Product {
     private Double price;
 
     @Column(name = "createdAt", nullable = false)
+    @CreationTimestamp
     private LocalDate createdAt;
 
     @OneToMany(targetEntity = OrderItem.class, fetch = FetchType.LAZY, mappedBy = "product")

@@ -15,6 +15,8 @@
         <module>infrastructure</module>
         <module>ms-order</module>
         <module>productDomain</module>
+        <module>productApplication</module>
+        <module>ms-product</module>
     </modules>
 
     <properties>
