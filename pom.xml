@@ -13,6 +13,8 @@
         <module>orderDomain</module>
         <module>common-dtos</module>
         <module>infrastructure</module>
+        <module>ms-order</module>
+        <module>productDomain</module>
     </modules>
 
     <properties>

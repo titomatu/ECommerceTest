@@ -8,7 +8,7 @@ public interface OrderPersistencePort {
 
     public OrderDto updateOrderStatus(String orderId, String orderStatus);
 
-    public Optional<OrderDto> findOrderById(String id);
+    public OrderDto findOrderById(String id);
 
     public OrderDto createOrder(OrderDto orderDto);
 }

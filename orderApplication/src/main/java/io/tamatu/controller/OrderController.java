@@ -26,23 +26,23 @@ public class OrderController {
 
     @GetMapping("/orders/{orderId}")
     public ResponseEntity<OrderDto> getOrderById(@PathVariable final String orderId){
-        Optional<OrderDto> orderDto = this.orderServicePort.findOrderById(orderId);
+        OrderDto orderDto = this.orderServicePort.findOrderById(orderId);
 
-        if(orderDto.isPresent())
-            return ResponseEntity.status(HttpStatus.FOUND).body(orderDto.get());
+        if(orderDto != null)
+            return ResponseEntity.status(HttpStatus.FOUND).body(orderDto);
         else
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @PatchMapping("/orders/{orderId}")
     public ResponseEntity<OrderDto> updateOrder(@PathVariable final String orderId, @RequestParam(name = "orderStatus") final String orderStatus){
-        Optional<OrderDto> orderDto = this.orderServicePort.findOrderById(orderId);
+        OrderDto orderDto = this.orderServicePort.findOrderById(orderId);
 
-        if(!orderDto.isPresent())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        else{
+        if(orderDto != null){
             this.orderServicePort.updateOrderStatus(orderId, orderStatus);
             return ResponseEntity.status(HttpStatus.OK).build();
+        } else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
     }

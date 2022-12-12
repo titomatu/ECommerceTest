@@ -1,12 +1,10 @@
 package io.tamatu.data;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.persistence.criteria.Order;
 
 @Entity
 @Table(name = "ecommerce_order_item")

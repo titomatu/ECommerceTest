@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "ecommerce_address")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -44,6 +43,9 @@ public class Address {
     private LocalDate createdAt;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "billingAddress")
-    private Order order;
+    private Order billedOrder;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "shippingAddress")
+    private Order shippedOrder;
 
 }

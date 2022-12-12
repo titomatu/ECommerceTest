@@ -4,8 +4,6 @@ import io.tamatu.dto.OrderDto;
 import io.tamatu.ports.api.OrderServicePort;
 import io.tamatu.ports.spi.OrderPersistencePort;
 
-import java.util.Optional;
-
 public class OrderServicePortImpl implements OrderServicePort {
 
     private OrderPersistencePort orderPersistencePort;
@@ -20,8 +18,8 @@ public class OrderServicePortImpl implements OrderServicePort {
     }
 
     @Override
-    public Optional<OrderDto> findOrderById(String id) {
-        return null;
+    public OrderDto findOrderById(String id) {
+        return this.orderPersistencePort.findOrderById(id);
     }
 
     @Override
