@@ -2,6 +2,7 @@ package io.tamatu.adapter;
 
 import io.tamatu.data.*;
 import io.tamatu.dto.OrderDto;
+import io.tamatu.dto.OrderItemDto;
 import io.tamatu.enums.OrderStatus;
 import io.tamatu.enums.PaymentStatus;
 import io.tamatu.mapper.AddressMapper;
@@ -89,21 +90,29 @@ public class OrderJpaAdapter implements OrderPersistencePort {
         Order order1 = this.orderRepository.save(order);
 
         if(orderDto.getOrderItems() != null){
-            List<OrderItem> orderItemList = new ArrayList<>();
-            orderDto.getOrderItems().stream()
-                    .forEach(
-                            o -> {
-                                orderItemList.add(new OrderItem(
-                                        new OrderItemPk(o.getProductId(), order1.getOrderId()),
-                                        o.getQuantity()
-                                ));
-                            }
-                    );
+
+            List<OrderItem> orderItemList = orderItemDtoListToOrderItemList(orderDto.getOrderItems(), order1.getOrderId());
 
             this.orderItemRepository.saveAll(orderItemList);
         }
 
         return OrderMapper.INSTANCE.orderToOrderDto(order1);
+    }
+
+    private static List<OrderItem> orderItemDtoListToOrderItemList(List<OrderItemDto> orderItemDtoList, String orderId){
+
+        List<OrderItem> orderItemList = new ArrayList<>();
+        orderItemDtoList.stream()
+                .forEach(
+                        o -> {
+                            orderItemList.add(new OrderItem(
+                                    new OrderItemPk(o.getProductId(), orderId),
+                                    o.getQuantity()
+                            ));
+                        }
+                );
+
+        return orderItemList;
     }
 
 }
