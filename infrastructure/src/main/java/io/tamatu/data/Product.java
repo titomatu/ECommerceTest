@@ -1,11 +1,18 @@
 package io.tamatu.data;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table(name = "ecommerce_product")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
 
     @Id
@@ -27,6 +34,6 @@ public class Product {
     @Column(name = "createdAt", nullable = false)
     private LocalDate createdAt;
 
-    @OneToMany(targetEntity = OrderItem::class, fetch = FetchType.LAZY, mappedBy = "product")
+    @OneToMany(targetEntity = OrderItem.class, fetch = FetchType.LAZY, mappedBy = "product")
     private List<OrderItem> orderItems;
 }

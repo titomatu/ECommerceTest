@@ -13,7 +13,6 @@ import javax.persistence.criteria.Order;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class OrderItem {
     @EmbeddedId
     private OrderItemPk orderItemPk;

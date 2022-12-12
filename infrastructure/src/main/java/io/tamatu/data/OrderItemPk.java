@@ -7,12 +7,15 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 
 @Embeddable
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderItemPk {
+public class OrderItemPk implements Serializable {
+    private static final long serialVersionUID = -2300012207323258424L;
+
     @Column(name = "product_id", nullable = false)
     private String productId;
 
