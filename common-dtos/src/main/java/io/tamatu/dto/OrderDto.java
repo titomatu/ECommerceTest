@@ -26,7 +26,7 @@ public class OrderDto {
     private String paymentMode;
 
     private AddressDto billingAddress;
-    private AddressDto AddressDto;
+    private AddressDto shippingAddress;
 
     private List<OrderItemDto> orderItems;
 }

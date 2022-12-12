@@ -1,12 +1,15 @@
 package io.tamatu.adapter;
 
+import io.tamatu.data.Address;
 import io.tamatu.data.Order;
 import io.tamatu.data.Payment;
 import io.tamatu.dto.OrderDto;
 import io.tamatu.enums.OrderStatus;
 import io.tamatu.enums.PaymentStatus;
+import io.tamatu.mapper.AddressMapper;
 import io.tamatu.mapper.OrderMapper;
 import io.tamatu.ports.spi.OrderPersistencePort;
+import io.tamatu.repository.AddressRepository;
 import io.tamatu.repository.OrderItemRepository;
 import io.tamatu.repository.OrderRepository;
 import io.tamatu.repository.PaymentRepository;
@@ -28,6 +31,9 @@ public class OrderJpaAdapter implements OrderPersistencePort {
     @Autowired
     private PaymentRepository paymentRepository;
 
+    @Autowired
+    private AddressRepository addressRepository;
+
     @Override
     public OrderDto updateOrderStatus(String orderId, String orderStatus) {
         return null;
@@ -42,6 +48,8 @@ public class OrderJpaAdapter implements OrderPersistencePort {
             OrderDto orderDto = OrderMapper.INSTANCE.orderToOrderDto(order1);
             orderDto.setAmount(order1.getPayment().getAmount());
             orderDto.setPaymentMode(order1.getPayment().getPaymentMode());
+            orderDto.setShippingAddress(AddressMapper.INSTANCE.addressToAddressDto(order1.getShippingAddress()));
+            orderDto.setBillingAddress(AddressMapper.INSTANCE.addressToAddressDto(order1.getBillingAddress()));
 
             return orderDto;
         }
@@ -64,9 +72,19 @@ public class OrderJpaAdapter implements OrderPersistencePort {
                 .paymentStatus(PaymentStatus.PROCESSING.name())
                 .build();
 
+        Address shippingAddress = AddressMapper.INSTANCE.addressDtoToAddress(orderDto.getShippingAddress());
+        shippingAddress.setAddressId(UUID.randomUUID().toString());
+
+        Address billingAddress = AddressMapper.INSTANCE.addressDtoToAddress(orderDto.getBillingAddress());
+        billingAddress.setAddressId(UUID.randomUUID().toString());
+
         Payment payment1 = this.paymentRepository.save(payment);
+        Address shippingAddress1 = this.addressRepository.save(shippingAddress);
+        Address billingAddress1 = this.addressRepository.save(billingAddress);
 
         order.setPayment(payment1);
+        order.setShippingAddress(shippingAddress1);
+        order.setBillingAddress(billingAddress1);
 
         Order order1 = this.orderRepository.save(order);
 

@@ -3,6 +3,7 @@ package io.tamatu.data;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -40,6 +41,7 @@ public class Address {
     private String phone;
 
     @Column(name = "createdAt", nullable = false)
+    @CreationTimestamp
     private LocalDate createdAt;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "billingAddress")
