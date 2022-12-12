@@ -25,7 +25,7 @@ public class OrderController {
     }
 
     @GetMapping("/orders/{orderId}")
-    public ResponseEntity<OrderDto> getOrderById(@PathVariable final String orderId){
+    public ResponseEntity<OrderDto> getOrderById(@PathVariable(name = "orderId") final String orderId){
         OrderDto orderDto = this.orderServicePort.findOrderById(orderId);
 
         if(orderDto != null)
@@ -35,7 +35,7 @@ public class OrderController {
     }
 
     @PatchMapping("/orders/{orderId}")
-    public ResponseEntity<OrderDto> updateOrder(@PathVariable final String orderId, @RequestParam(name = "orderStatus") final String orderStatus){
+    public ResponseEntity<OrderDto> updateOrder(@PathVariable(name = "orderId") final String orderId, @RequestParam(name = "orderStatus") final String orderStatus){
         OrderDto orderDto = this.orderServicePort.findOrderById(orderId);
 
         if(orderDto != null){

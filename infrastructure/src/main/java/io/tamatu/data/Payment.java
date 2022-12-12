@@ -1,8 +1,10 @@
 package io.tamatu.data;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -12,6 +14,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Payment {
 
     @Id
@@ -31,6 +34,7 @@ public class Payment {
     private String paymentStatus;
 
     @Column(name = "createdAt", nullable = false)
+    @CreationTimestamp
     private LocalDate createdAt;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "payment")

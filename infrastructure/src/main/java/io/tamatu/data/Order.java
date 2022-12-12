@@ -1,8 +1,10 @@
 package io.tamatu.data;
 
+import io.tamatu.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,8 +21,9 @@ public class Order {
     @Column(name = "order_id", nullable = false, unique = true)
     private String orderId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "order_status")
-    private String orderStatus;
+    private OrderStatus orderStatus;
 
     @Column(name = "customer_id")
     private String customerId;
@@ -44,6 +47,7 @@ public class Order {
     private String shippingMode;
 
     @Column(name = "created_at")
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @OneToOne(cascade = CascadeType.ALL)

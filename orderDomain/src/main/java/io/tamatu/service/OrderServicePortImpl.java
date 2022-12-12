@@ -27,7 +27,7 @@ public class OrderServicePortImpl implements OrderServicePort {
 
     @Override
     public OrderDto createOrder(OrderDto orderDto) {
-        return null;
+        return this.orderPersistencePort.createOrder(orderDto);
     }
 
 }
