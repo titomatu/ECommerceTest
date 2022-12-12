@@ -25,4 +25,9 @@ public class OrderItem {
 
     @Column(name = "quantity", nullable = false)
     private String quantity;
+
+    public OrderItem(OrderItemPk orderItemPk, String quantity){
+        this.orderItemPk = orderItemPk;
+        this.quantity = quantity;
+    }
 }

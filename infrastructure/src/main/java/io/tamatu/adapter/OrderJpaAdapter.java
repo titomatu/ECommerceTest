@@ -1,8 +1,6 @@
 package io.tamatu.adapter;
 
-import io.tamatu.data.Address;
-import io.tamatu.data.Order;
-import io.tamatu.data.Payment;
+import io.tamatu.data.*;
 import io.tamatu.dto.OrderDto;
 import io.tamatu.enums.OrderStatus;
 import io.tamatu.enums.PaymentStatus;
@@ -16,6 +14,8 @@ import io.tamatu.repository.PaymentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -87,6 +87,21 @@ public class OrderJpaAdapter implements OrderPersistencePort {
         order.setBillingAddress(billingAddress1);
 
         Order order1 = this.orderRepository.save(order);
+
+        if(orderDto.getOrderItems() != null){
+            List<OrderItem> orderItemList = new ArrayList<>();
+            orderDto.getOrderItems().stream()
+                    .forEach(
+                            o -> {
+                                orderItemList.add(new OrderItem(
+                                        new OrderItemPk(o.getProductId(), order1.getOrderId()),
+                                        o.getQuantity()
+                                ));
+                            }
+                    );
+
+            this.orderItemRepository.saveAll(orderItemList);
+        }
 
         return OrderMapper.INSTANCE.orderToOrderDto(order1);
     }
