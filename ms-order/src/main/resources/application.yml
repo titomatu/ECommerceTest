@@ -1,8 +1,8 @@
 server:
-  port: 8585
+  port: 8089
   shutdown: graceful
   servlet:
-    context-path: /product-ecommerce
+    context-path: /order-ecommerce
 
 spring:
   application:
@@ -29,7 +29,7 @@ spring:
       connection-timeout: 60000
       maximum-pool-size: 10
       autocommit: false
-      poolname: product-ecommerce
+      poolname: order-ecommerce
       validationTimeout: 60000
 logging:
   level:

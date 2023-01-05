@@ -21,6 +21,26 @@ services:
       - order-ecommerce-local
     restart: always
 
+  ms-order:
+    image: order-ecommerce
+    build:
+      context: ./ms-order
+      dockerfile: Dockerfile
+    container_name: order-ecommerce
+    depends_on:
+      - postgres
+    ports:
+      - "8089:8089"
+    env_file: ./.env
+    environment:
+      SPRING_APPLICATION_JSON: '{
+            "spring.datasource.url"  : "jdbc:postgresql://$POSTGRES_SERVER:$POSTGRES_PORT/orderecommerce_db?currentSchema=public",
+            "spring.datasource.username" : "$POSTGRES_USER",
+            "spring.datasource.password" : "$POSTGRES_PASSWORD"}'
+    networks:
+      - order-ecommerce-local
+    restart: always
+
   postgres:
     image: postgres:latest
     container_name: postgres
