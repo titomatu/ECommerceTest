@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  ms-product:
+    image: product-ecommerce
+    build:
+      context: ./ms-product
+      dockerfile: Dockerfile
+    container_name: product-ecommerce
+    depends_on:
+      - postgres
+    ports:
+      - "8585:8585"
+    env_file: ./.env
+    environment:
+      SPRING_APPLICATION_JSON: '{
+            "spring.datasource.url"  : "jdbc:postgresql://$POSTGRES_SERVER:$POSTGRES_PORT/orderecommerce_db?currentSchema=public",
+            "spring.datasource.username" : "$POSTGRES_USER",
+            "spring.datasource.password" : "$POSTGRES_PASSWORD"}'
+    networks:
+      - order-ecommerce-local
+    restart: always
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_DB=orderecommerce_db
+      - POSTGRES_USER=orderecommerceuser
+      - POSTGRES_PASSWORD=orderecommercepwd
+    volumes:
+      - ./setup.sql:/docker-entrypoint-initdb.d/setup.sql
+      - postgres-data:/var/lib/postgres
+    networks:
+      - order-ecommerce-local
+volumes:
+  postgres-data:
+
+networks:
+  order-ecommerce-local:
+    name: order-ecommerce-local

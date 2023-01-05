@@ -1,0 +1,36 @@
+server:
+  port: 8585
+  shutdown: graceful
+  servlet:
+    context-path: /product-ecommerce
+
+spring:
+  application:
+    name: product-ecommerce
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    properties:
+      hibernate:
+        generate_statistics: false
+        jdbc:
+          batch_size: 30
+        order_inserts: true
+        order_updates: true
+        batch_versioned_data: true
+    hibernate:
+      ddl-auto: none
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://${POSTGRES_SERVER:localhost}:${POSTGRES_PORT:5432}/orderecommerce_db?currentSchema=public
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+    hikari:
+      connection-timeout: 60000
+      maximum-pool-size: 10
+      autocommit: false
+      poolname: order-ecommerce
+      validationTimeout: 60000
+logging:
+  level:
+    sql: trace
