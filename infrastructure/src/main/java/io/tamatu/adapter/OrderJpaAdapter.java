@@ -8,10 +8,7 @@ import io.tamatu.enums.PaymentStatus;
 import io.tamatu.mapper.AddressMapper;
 import io.tamatu.mapper.OrderMapper;
 import io.tamatu.ports.spi.OrderPersistencePort;
-import io.tamatu.repository.AddressRepository;
-import io.tamatu.repository.OrderItemRepository;
-import io.tamatu.repository.OrderRepository;
-import io.tamatu.repository.PaymentRepository;
+import io.tamatu.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +21,8 @@ import java.util.UUID;
 @Slf4j
 @Service
 public class OrderJpaAdapter implements OrderPersistencePort {
+    @Autowired
+    private ProductRepository productRepository;
 
     @Autowired
     private OrderRepository orderRepository;
@@ -54,6 +53,7 @@ public class OrderJpaAdapter implements OrderPersistencePort {
             orderDto.setShippingAddress(AddressMapper.INSTANCE.addressToAddressDto(order1.getShippingAddress()));
             orderDto.setBillingAddress(AddressMapper.INSTANCE.addressToAddressDto(order1.getBillingAddress()));
             orderDto.setOrderItems(orderItemListToOrderItemDtoList(order1.getOrderItems()));
+
 
             return orderDto;
         }
@@ -91,10 +91,27 @@ public class OrderJpaAdapter implements OrderPersistencePort {
         order.setBillingAddress(billingAddress1);
 
         Order order1 = this.orderRepository.save(order);
-
         if(orderDto.getOrderItems() != null){
 
             List<OrderItem> orderItemList = orderItemDtoListToOrderItemList(orderDto.getOrderItems(), order1.getOrderId());
+            double total = 0;
+
+            for (OrderItem p: orderItemList) {
+                Optional<Product> productOptional = productRepository.findById(p.getOrderItemPk().getProductId());
+
+                if(productOptional.isPresent()){
+                    Product product = productOptional.get();
+                    //2. Calculate price * qty
+                    //3. summarize total
+                    log.warn("========> QTY {} * VL {}",Double.valueOf(p.getQuantity()).doubleValue(), product.getPrice().doubleValue());
+                    total += Double.valueOf(p.getQuantity()).doubleValue() * product.getPrice().doubleValue();
+                } else {
+                    total += 0.0; //Not necessary
+                }
+            }
+
+            order1.setSubTotal(total);
+            this.orderRepository.save(order1);
 
             this.orderItemRepository.saveAll(orderItemList);
         }
